@@ -1,0 +1,7 @@
+gradio
+pyautogui
+opencv-python
+
+diffusers
+transformers
+accelerate
