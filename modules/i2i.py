@@ -12,6 +12,10 @@ def create_pipe(name):
 def create_image(checkpoint, prompt, negative_prompt, init_image, steps, strength, guidance_scale):
     if not pipe_name == checkpoint:
         create_pipe(checkpoint)
-    output_image = pipe(prompt, negative_prompt=negative_prompt, image=init_image, num_inference_steps=steps, strength=strength, guidance_scale=guidance_scale).images[0]
+
+    output_image = pipe(prompt, negative_prompt=negative_prompt, 
+                        image=init_image, 
+                        num_inference_steps=steps, strength=strength, guidance_scale=guidance_scale).images[0]
+    # output_image.save('output.jpg')
     return [output_image]
     # Galleyにはlistで返さないと行けないので

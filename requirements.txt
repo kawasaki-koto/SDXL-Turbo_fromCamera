@@ -1,7 +1,9 @@
-gradio
+gradio==5.0.1
 pyautogui
 opencv-python
 
 diffusers
 transformers
 accelerate
+
+deep_translator
