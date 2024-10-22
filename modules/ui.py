@@ -1,5 +1,6 @@
 import gradio as gr
-from modules import cmd_args, i2i, capture, translator
+from gradio_webrtc import WebRTC
+from modules import cmd_args, i2i, translator
 
 args = cmd_args.parser.parse_args()
 
@@ -37,13 +38,14 @@ def create_ui() :
 
                 with gr.Column(scale=2):
                     gr.Markdown("## Input Image")
-                    input_image = gr.Image(label="Input Image", interactive=True, show_label=False)
+                    input_image = WebRTC(label="Stream", mode="send-receive", modality="video")
 
         with gr.Column():
             gr.Markdown("## Output Image")
             output_image = gr.Gallery(label="Output Image", show_label=False)
             dummy_output = gr.Gallery(visible=True)
 
+        # 翻訳
         prompt.change(fn=translate_prompt,
                       inputs=[prompt, language], 
                       outputs=[dummy_prompt])
@@ -52,19 +54,20 @@ def create_ui() :
                       inputs=[negative_prompt, language], 
                       outputs=[dummy_negative_prompt])
 
+        # ボタンクリック
         start_button.click(fn=start_click,
-                           inputs=[screen, width, height, 
-                                   checkpoint_name, dummy_prompt, dummy_negative_prompt, input_image, steps, strength, cfg_scale],
-                           outputs=[dummy_output, 
+                            inputs=[screen, width, height, 
+                                    checkpoint_name, dummy_prompt, dummy_negative_prompt, input_image, steps, strength, cfg_scale],
+                            outputs=[dummy_output, 
                                     stop_button, start_button])
-        
+
         stop_button.click(fn=switch_button,
                           outputs=[start_button, stop_button])
-        
-        dummy_output.change(fn=dummy_to_image,
+        # Image
+
+        dummy_output.change(fn=switch_image,
                             inputs=[dummy_output],
                             outputs=[output_image])
-
         dummy_output.change(fn=generate,
                             inputs=[screen, width, height, 
                                     checkpoint_name, dummy_prompt, dummy_negative_prompt, input_image, steps, strength, cfg_scale],
@@ -87,16 +90,17 @@ def switch_button():
     now_generate = not now_generate
     return gr.Button(visible=True), gr.Button(visible=False)
 
-def dummy_to_image(image):
+def switch_image(image):
     return image
 
 def generate(screen, width, height, checkpoint, prompt, negative_prompt, input_image,  steps, strength, cfg_scale):
     if now_generate:
+        print(type(input_image))
         output_image = i2i.create_image(checkpoint, prompt, negative_prompt, input_image, steps, strength, cfg_scale)
         return output_image
     
     else:
-        return input_image
+        return [input_image]
 
 def start() :
     global now_generate
