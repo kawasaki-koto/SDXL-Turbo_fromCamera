@@ -37,13 +37,12 @@ def create_ui() :
 
                 with gr.Column(scale=2):
                     gr.Markdown("## Input Image")
-                    input_image = gr.Image(label="Input Image", interactive=False, show_label=False)
-                    dummy_input = gr.Image(visible=False)
+                    input_image = gr.Image(label="Input Image", interactive=True, show_label=False)
 
         with gr.Column():
             gr.Markdown("## Output Image")
             output_image = gr.Gallery(label="Output Image", show_label=False)
-            dummy_output = gr.Gallery(visible=False)
+            dummy_output = gr.Gallery(visible=True)
 
         prompt.change(fn=translate_prompt,
                       inputs=[prompt, language], 
@@ -55,8 +54,8 @@ def create_ui() :
 
         start_button.click(fn=start_click,
                            inputs=[screen, width, height, 
-                                   checkpoint_name, dummy_prompt, dummy_negative_prompt, dummy_input, steps, strength, cfg_scale],
-                           outputs=[dummy_input, dummy_output, 
+                                   checkpoint_name, dummy_prompt, dummy_negative_prompt, input_image, steps, strength, cfg_scale],
+                           outputs=[dummy_output, 
                                     stop_button, start_button])
         
         stop_button.click(fn=switch_button,
@@ -65,15 +64,11 @@ def create_ui() :
         dummy_output.change(fn=dummy_to_image,
                             inputs=[dummy_output],
                             outputs=[output_image])
-        
-        dummy_input.change(fn=dummy_to_image,
-                            inputs=[dummy_input],
-                            outputs=[input_image])
 
         dummy_output.change(fn=generate,
                             inputs=[screen, width, height, 
-                                    checkpoint_name, dummy_prompt, dummy_negative_prompt, dummy_input, steps, strength, cfg_scale],
-                            outputs=[dummy_input, dummy_output])
+                                    checkpoint_name, dummy_prompt, dummy_negative_prompt, input_image, steps, strength, cfg_scale],
+                            outputs=[dummy_output])
 
     return demo
 
@@ -81,12 +76,11 @@ def translate_prompt(prompt, language):
     if language == "日本語":
         prompt = translator.jap_to_eng(prompt)
     return prompt
-    
 
-def start_click(screen, width, height, checkpoint_name, prompt, negative_prompt, dummy_input, steps, strength, cfg_scale):
+def start_click(screen, width, height, checkpoint_name, prompt, negative_prompt, image, steps, strength, cfg_scale):
     stop, start = switch_button()
-    input, output = generate(screen, width, height, checkpoint_name, prompt, negative_prompt, dummy_input, steps, strength, cfg_scale)
-    return input, output, stop, start
+    output = generate(screen, width, height, checkpoint_name, prompt, negative_prompt, image, steps, strength, cfg_scale)
+    return output, stop, start
 
 def switch_button():
     global now_generate
@@ -98,12 +92,11 @@ def dummy_to_image(image):
 
 def generate(screen, width, height, checkpoint, prompt, negative_prompt, input_image,  steps, strength, cfg_scale):
     if now_generate:
-        input_image = capture.capture_image(screen, width, height)
         output_image = i2i.create_image(checkpoint, prompt, negative_prompt, input_image, steps, strength, cfg_scale)
-        return input_image, output_image
+        return output_image
     
     else:
-        return input_image, None
+        return input_image
 
 def start() :
     global now_generate

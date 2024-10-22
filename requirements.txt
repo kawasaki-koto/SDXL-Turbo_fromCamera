@@ -1,6 +1,4 @@
-gradio==5.0.1
-pyautogui
-opencv-python
+gradio
 
 diffusers
 transformers
