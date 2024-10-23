@@ -1,7 +1,10 @@
 gradio
+<<<<<<< HEAD
+=======
+pyautogui
+opencv-python
+>>>>>>> flask
 
-diffusers
-transformers
-accelerate
+requests
 
 deep_translator
