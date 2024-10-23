@@ -1,5 +1,5 @@
 import gradio as gr
-from modules import cmd_args, i2i, capture, translator
+from modules import cmd_args, hpc, capture, translator
 
 args = cmd_args.parser.parse_args()
 
@@ -99,7 +99,7 @@ def dummy_to_image(image):
 def generate(screen, width, height, checkpoint, prompt, negative_prompt, input_image,  steps, strength, cfg_scale):
     if now_generate:
         input_image = capture.capture_image(screen, width, height)
-        output_image = i2i.create_image(checkpoint, prompt, negative_prompt, input_image, steps, strength, cfg_scale)
+        output_image = hpc.i2i(checkpoint, prompt, negative_prompt, input_image, steps, strength, cfg_scale)
         return input_image, output_image
     
     else:
@@ -108,5 +108,5 @@ def generate(screen, width, height, checkpoint, prompt, negative_prompt, input_i
 def start() :
     global now_generate
     now_generate = False
-    i2i.create_pipe("stabilityai/sdxl-turbo")
+    # i2i.create_pipe("stabilityai/sdxl-turbo")
     create_ui().launch(share=args.share, inbrowser=args.autolaunch)

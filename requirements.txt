@@ -1,9 +1,7 @@
-gradio==5.0.1
+gradio
 pyautogui
 opencv-python
 
-diffusers
-transformers
-accelerate
+requests
 
 deep_translator
