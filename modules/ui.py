@@ -26,7 +26,7 @@ def create_ui() :
                                                   choices=["stabilityai/sdxl-turbo", "Lykon/AAM_XL_AnimeMix_Turbo"], 
                                                   value="stabilityai/sdxl-turbo", 
                                                   visible=False)
-                    gr.Markdown("# <u>**!!!! 必ず steps * strength >= 1.0　にしてください !!!!**</u>")
+                    gr.Markdown("# <u>**!!!! 必ず steps * strength >= 1.0 にしてください !!!!**</u>")
                     
                     steps = gr.Slider(minimum=1, maximum=20, step=1, label="Steps", value=2)
                     strength = gr.Slider(minimum=0.0, maximum=1.0, step=0.05, label="Strength", value=0.5)
@@ -39,11 +39,7 @@ def create_ui() :
                     gr.Markdown("## Input Image")
                     input_image = gr.Image(label="Input Image", interactive=False, show_label=False)
                     dummy_input = gr.Image(visible=False)
-
-        with gr.Column():
-            gr.Markdown("## Output Image")
-            output_image = gr.Gallery(label="Output Image", show_label=False)
-            dummy_output = gr.Gallery(visible=False)
+                    dummy_output = gr.Gallery(visible=False)
 
         prompt.change(fn=translate_prompt,
                       inputs=[prompt, language], 
@@ -61,10 +57,6 @@ def create_ui() :
         
         stop_button.click(fn=switch_button,
                           outputs=[start_button, stop_button])
-        
-        dummy_output.change(fn=dummy_to_image,
-                            inputs=[dummy_output],
-                            outputs=[output_image])
         
         dummy_input.change(fn=dummy_to_image,
                             inputs=[dummy_input],

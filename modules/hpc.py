@@ -22,6 +22,7 @@ def i2i(checkpoint, prompt, negative_prompt, init_image, steps, strength, guidan
     if response.status_code == 200:
         img_data = io.BytesIO(response.content)
         output_image = Image.open(img_data)
+        output_image.save('./output.jpg')
         return [output_image]
     else:
         print("Error:", response.status_code)

@@ -15,7 +15,7 @@ label.pack()
 def update_image():
     try:
         # 画像を読み込んでTkinterで表示できる形式に変換
-        img = Image.open("test.jpg")
+        img = Image.open("./output.jpg")
         img = img.resize((1440, 1080), Image.Resampling.LANCZOS)
         tk_image = ImageTk.PhotoImage(img)
         
@@ -26,7 +26,7 @@ def update_image():
         print(f"画像の読み込みに失敗しました: {e}")
     
     # 1秒ごとに画像を更新
-    window.after(1000, update_image)
+    window.after(500, update_image)
 
 # 最初の画像を表示
 update_image()
