@@ -31,5 +31,7 @@ def update_image():
 # 最初の画像を表示
 update_image()
 
+window.attributes('-fullscreen', True)
+
 # ウィンドウを表示し続ける
 window.mainloop()

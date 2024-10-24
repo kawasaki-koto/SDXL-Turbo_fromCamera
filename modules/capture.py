@@ -2,7 +2,7 @@ import pyautogui as pag
 import cv2
 from PIL import Image
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 def capture_image(screen, width, height):
     # from Screen
